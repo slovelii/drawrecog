@@ -18,27 +18,29 @@ def encode_image_to_base64(image_path):
             encoded_image = base64.b64encode(image_file.read()).decode("utf-8")
             return encoded_image
     except FileNotFoundError:
-        return "Error: La imagen no se encontró en la ruta especificada."
+        return "Error: ¡Ups! No encontramos la imagen del monstruito en la ruta."
 
-# Streamlit 
-st.set_page_config(page_title='Fábrica de Monstruos - Tablero Inteligente')
-st.title('🎨 Fábrica de Monstruos')
+# Configuración de página con un toque más lúdico
+st.set_page_config(page_title='🎨 Fábrica de Monstruos Mágicos', page_icon='👾')
+
+st.title('👾 ¡Bienvenido a la Fábrica de Monstruos Mágicos! 🦖')
 
 with st.sidebar:
-    st.subheader("Acerca de:")
-    st.subheader("¡Da vida a tu imaginación! En esta aplicación, una inteligencia artificial analizará el boceto de tu monstruo único para darle una identidad completa.")
+    st.subheader("🌟 ¿Qué es este lugar?")
+    st.write("¡Da rienda suelta a tu imaginación! Aquí, un simpático Monstru-Asistente de Inteligencia Artificial analizará los trazos de tu criatura única para contarle al mundo quién es, qué poderes tiene y de qué planeta viene.")
 
-st.subheader("¡Libera tu creatividad! Dibuja tu propio monstruo en el tablero de abajo y presiona el botón para descubrir quién es.")
+st.markdown("### 🖍️ ¡A dibujar se ha dicho!")
+st.write("Suelta toda tu creatividad: dibuja tu propio monstruo loco en el tablero de aquí abajo y presiona el botón mágico para descubrir su verdadera identidad.")
 
 # Add canvas component
 drawing_mode = "freedraw"
-stroke_width = st.sidebar.slider('Selecciona el ancho de línea', 1, 30, 5)
-stroke_color = "#000000" 
-bg_color = '#FFFFFF'
+stroke_width = st.sidebar.slider('🪄 Elige el grosor del pincel mágico', 1, 30, 5)
+stroke_color = "#111111"  
+bg_color = '#FFF9F0' # Un fondo ligeramente cálido como papel de dibujo
 
 # Create a canvas component
 canvas_result = st_canvas(
-    fill_color="rgba(255, 165, 0, 0.3)",  # Fixed fill color with some opacity
+    fill_color="rgba(255, 165, 0, 0.3)",  
     stroke_width=stroke_width,
     stroke_color=stroke_color,
     background_color=bg_color,
@@ -48,7 +50,7 @@ canvas_result = st_canvas(
     key="canvas",
 )
 
-ke = st.text_input('Ingresa tu Clave de OpenAI (API Key)')
+ke = st.text_input('🔑 Ingresa tu Clave Secreta de OpenAI (API Key)', type='password')
 os.environ['OPENAI_API_KEY'] = ke
 
 # Retrieve the OpenAI API Key from secrets
@@ -57,12 +59,12 @@ api_key = os.environ['OPENAI_API_KEY']
 # Initialize the OpenAI client with the API key
 client = OpenAI(api_key=api_key)
 
-analyze_button = st.button("¡Crear Monstruo!", type="secondary")
+analyze_button = st.button("🚀 ¡Dar vida a mi Monstruo!", type="primary")
 
 # Check if an image has been uploaded, if the API key is available, and if the button has been pressed
 if canvas_result.image_data is not None and api_key and analyze_button:
 
-    with st.spinner("Dando vida a tu criatura... Analizando trazos..."):
+    with st.spinner("✨ Mezclando pociones de colores... ¡Dando vida a tu criatura y analizando sus trazos locos! 🧪"):
         # Encode the image
         input_numpy_array = np.array(canvas_result.image_data)
         input_image = Image.fromarray(input_numpy_array.astype('uint8'), 'RGBA')
@@ -79,7 +81,7 @@ if canvas_result.image_data is not None and api_key and analyze_button:
             "2. Edad (o tiempo de existencia). "
             "3. Habilidades o poderes especiales únicos basados en sus rasgos visuales. "
             "4. Una posible historia corta (lore) sobre de dónde viene, qué le gusta hacer o cuál es su misión en el mundo. "
-            "Dale un tono creativo, amigable y narrativo."
+            "Dale un tono creativo, sumamente amigable, divertido y narrativo, ideal para niños."
         )
     
         # Create the payload for the completion request
@@ -130,7 +132,7 @@ if canvas_result.image_data is not None and api_key and analyze_button:
                 st.session_state.mi_respuesta = response.choices[0].message.content 
     
         except Exception as e:
-            st.error(f"Ocurrió un error: {e}")
+            st.error(f"💥 ¡Rayos y centellas! Ocurrió un pequeño error en el laboratorio: {e}")
 else:
     if not api_key:
-        st.warning("Por favor ingresa tu API key para comenzar la creación.")
+        st.warning("🔒 ¡Psst! No olvides ingresar tu API Key de OpenAI en la casilla de arriba para encender la fábrica de monstruos.")
