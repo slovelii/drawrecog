@@ -20,14 +20,70 @@ def encode_image_to_base64(image_path):
     except FileNotFoundError:
         return "Error: ¡Ups! No encontramos la imagen del monstruito en la ruta."
 
-# Configuración de página con un toque más lúdico
+# Configuración de página
 st.set_page_config(page_title='🎨 Fábrica de Monstruos Mágicos', page_icon='👾')
 
-st.title('👾 ¡Bienvenido a la Fábrica de Monstruos Mágicos! 🦖')
+# --- ESTILOS CSS PERSONALIZADOS (Colores y Tipografía) ---
+st.markdown("""
+    <style>
+    /* Importar una fuente divertida y redondeada desde Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
+    /* Aplicar la tipografía a toda la aplicación */
+    html, body, [class*="css"] {
+        font-family: 'Fredoka', cursive, sans-serif;
+    }
+
+    /* Fondo general de la aplicación de un tono alegre y suave */
+    .stApp {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background-color: #e0f7fa;
+    }
+
+    /* Estilo para la barra lateral (Sidebar) con un toque colorido */
+    [data-testid="stSidebar"] {
+        background-color: #fff8e1;
+        border-right: 4px dashed #ffb74d;
+    }
+
+    /* Personalizar los títulos principales */
+    h1 {
+        color: #ff6f00;
+        text-shadow: 2px 2px 0px #ffe082;
+    }
+    
+    h2, h3 {
+        color: #00838f;
+    }
+
+    /* Botones personalizados estilo caricatura */
+    .stButton > button {
+        background-color: #ff5722;
+        color: white;
+        border-radius: 20px;
+        border: 3px solid #e64a19;
+        font-weight: bold;
+        box-shadow: 0px 4px 0px #bf360c;
+        transition: all 0.1s ease;
+    }
+    
+    .stButton > button:hover {
+        background-color: #ff7043;
+        color: #fff;
+    }
+
+    .stButton > button:active {
+        transform: translateY(4px);
+        box-shadow: 0px 0px 0px #bf360c;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.title('🎨 ¡Fábrica de Monstruos Mágicos! 👾')
 
 with st.sidebar:
     st.subheader("🌟 ¿Qué es este lugar?")
-    st.write("¡Da rienda suelta a tu imaginación! Aquí, un simpático Monstru-Asistente de Inteligencia Artificial analizará los trazos de tu criatura única para contarle al mundo quién es, qué poderes tiene y de qué planeta viene.")
+    st.write("¡Da rienda suelta a tu imaginación! Aquí, un simpático Monstru-Asistente de Inteligencia Artificial analizará los trazos de tu criatura única para contarle al mundo quién es y qué poderes tiene.")
 
 st.markdown("### 🖍️ ¡A dibujar se ha dicho!")
 st.write("Suelta toda tu creatividad: dibuja tu propio monstruo loco en el tablero de aquí abajo y presiona el botón mágico para descubrir su verdadera identidad.")
@@ -36,7 +92,7 @@ st.write("Suelta toda tu creatividad: dibuja tu propio monstruo loco en el table
 drawing_mode = "freedraw"
 stroke_width = st.sidebar.slider('🪄 Elige el grosor del pincel mágico', 1, 30, 5)
 stroke_color = "#111111"  
-bg_color = '#FFF9F0' # Un fondo ligeramente cálido como papel de dibujo
+bg_color = '#FFFFFF'
 
 # Create a canvas component
 canvas_result = st_canvas(
